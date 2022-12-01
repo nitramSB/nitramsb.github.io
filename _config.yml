@@ -1,7 +1,5 @@
 theme: jekyll-theme-hacker
 title: Embedded System Security
-show_downloads: true
-
-github: 
+show_downloads: false
 is_project_page: false
   
