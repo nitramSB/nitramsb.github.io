@@ -1,5 +1,3 @@
-## Home Page
-
 ### Fault Injection Attack
 
 Fault Injection in an attack method that exploits the emerging behavior of components when driven outside their operating range. Ways to drive the target device outside the operating range are (not an exhaustive list):
