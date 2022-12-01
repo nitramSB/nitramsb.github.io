@@ -1,37 +1,13 @@
-## Welcome to GitHub Pages
+## Home Page
 
-You can use the [editor on GitHub](https://github.com/nitramSB/nitramsb.github.io/edit/main/index.md) to maintain and preview the content for your website in Markdown files.
+### Fault Injection Attack
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Fault Injection in an attack method that exploits the emerging behavior of components when driven outside their operating range. Ways to drive the target device outside the operating range are (not an exhaustive list):
 
-### Markdown
+1. Voltage
+2. Electromagnetic interference
+3. Frequency modulation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+##Example attack on a microcontroller
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/nitramSB/nitramsb.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+If a microcontroller input voltage is outside the operating specifications this causes instructions and data to be corrupted. If the overvoltage is balanced for just the amount of time the microcontroller will skip a few instructions but continue to function. If an attacker correlates the time-execution of the code running inside the microcontroller with faulting the device he/she may be able to compromise the confidentiality, integrity or availability of the device. Such an successfull attack could lead to accessing the otherwise protected memory of the microcontroller, thus breaching the integrity and confedentiality of the device depending on the content of memory.
