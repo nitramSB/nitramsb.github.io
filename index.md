@@ -1,6 +1,6 @@
 ## Extracting WiFi credentials from a Tuya smart bulb
 
-About a year ago I purchased 10x LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home solutions, but I was not interesting in paying almost 4 times the price for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they did the job OK, but they did not provide a high quality feel in terms of app responsiveneness. 
+About a year ago I purchased 10 LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home solutions, but I was not interesting in paying almost 4 times the price for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they did the job OK, but they did not provide a high quality feel in terms of app responsiveneness. 
 
 
 ### Installation process
@@ -25,9 +25,10 @@ Based on the above operation, there are multiple security concerns:
 
 In this blog post, we will explore the latter security concern by attempting to dump the flash memory of the smart bulb and see if we can retreive the password for the home WiFi. This will require physical access to the device, but if we consider the smart bulb's life cycle we can easily imagine that one throws away a defect bulb for replacement which could end up in the hands of an adversary. Access to your home Wifi could be the foothold that an adversary needs to launch further attacks that may lead to important assets being compromised.
 
-### Attack Plan
-1. Open up the device
-2. Locate the flash memory
-3. Perform OSINT to identify what type of hardware I am dealing with
-4. Identify what type of serial interface that is used to interact with the flash 
+### Step 1 - Exposing the hardware
+
+*Image here*
+
+
+### Step 1 - Exposing the hardware
 
