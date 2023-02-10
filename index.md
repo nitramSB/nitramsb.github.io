@@ -48,4 +48,9 @@ In order to verify that the circuit still works after it has been desoldered fro
 ### Step 4 - Checking serial ports  
 Most embedded devices contains serial interfaces that is used to debug and program the device before it leaves the factory. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. After inspecting both pair's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information
 
+> V:BK7231S_1.0.5
+
+
+
+
 
