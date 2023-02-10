@@ -1,11 +1,25 @@
-## Fault Injection Attack
+## Evaluating the security of Tuya smart bulbs
 
-Fault Injection in an attack method that exploits the emerging behavior of components when driven outside their operating range. Ways to drive the target device outside the operating range are (not an exhaustive list):
+About a year ago I purchased 10x LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home solutions, but I was not interesting in paying almost 4 times the price for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they did the job OK, but they did not provide a high quality feel in terms of app responsiveneness. 
 
-1. Voltage
-2. Electromagnetic interference
-3. Frequency modulation
 
-### Example attack on a microcontroller
+### Installation process
+From a user perspective, you set up the smart bulbs following these steps:
+1. Plug in the bulb into a 230V socket and turn it on
+2. Install Smart Home App (In my case for IOS)
+3. Follow the pairing wizard
 
-If a microcontroller input voltage is outside the operating specifications this causes instructions and data to be corrupted. If the overvoltage is balanced for just the amount of time the microcontroller will skip a few instructions but continue to function. If an attacker correlates the time-execution of the code running inside the microcontroller with faulting the device he/she may be able to compromise the confidentiality, integrity or availability of the device. Such an successfull attack could lead to accessing the otherwise protected memory of the microcontroller, thus breaching the integrity and confedentiality of the device depending on the content of memory.
+### How does the bulb work?
+
+1. The first time the pairing process is launched the the bulb boots and creates it's own wifi network
+2. The mobile phone running Smart Home connects to the bulb's network
+3. The user inputs the home WiFi credentials and they are sent to the bulb
+4. The next time the bulb boots it will join the home network using the saved credentials
+5. From now on the bulb is connected to Tuya servers on the internet that it receives commands from
+6. The Smart Home app communicates with the Tuya servers on the internet, requesting it to send commands to the device
+
+### Security Concerns
+Based on the above operation, there are multiple security concerns:
+1. The fact that system architecture requires internet access in itself an security concern. When adding the bulb to your home network you are essentially increasing the attack surface. You expose the device to any threat actor on the internet, which are a lot. There will be a very high likelyhood that the bulb contains vulnerabilitites waiting to be exploted by adversaries. In short, system development often results in undesired emerging behavior, due the interactions of system components, that the developers did not anticipate.
+2.  Since the bulb know how to connect to the home Wifi it must have stored the SSID and password inside the device. For embedded devices it is common to store such information in flash memory. Emebedded low cost IoT devices may not have the proper security modules that is able to encrypt the flash memory, which may leave sensitive information explosed.
+3.   
