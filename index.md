@@ -1,4 +1,4 @@
-## Evaluating the security of Tuya smart bulbs
+## Extracting WiFi credentials from a Tuya smart bulb
 
 About a year ago I purchased 10x LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home solutions, but I was not interesting in paying almost 4 times the price for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they did the job OK, but they did not provide a high quality feel in terms of app responsiveneness. 
 
