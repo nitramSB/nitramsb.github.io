@@ -21,5 +21,13 @@ From a user perspective, you set up the smart bulbs following these steps:
 ### Security Concerns
 Based on the above operation, there are multiple security concerns:
 1. The fact that system architecture requires internet access in itself an security concern. When adding the bulb to your home network you are essentially increasing the attack surface. You expose the device to any threat actor on the internet, which are a lot. There will be a very high likelyhood that the bulb contains vulnerabilitites waiting to be exploted by adversaries. In short, system development often results in undesired emerging behavior, due the interactions of system components, that the developers did not anticipate.
-2.  Since the bulb know how to connect to the home Wifi it must have stored the SSID and password inside the device. For embedded devices it is common to store such information in flash memory. Emebedded low cost IoT devices may not have the proper security modules that is able to encrypt the flash memory, which may leave sensitive information explosed.
-3.   
+2.  Since the bulb know how to connect to the home Wifi it must have stored the SSID and password inside the device. For embedded devices it is common to store such information in flash memory, either inside a SoC or in external flash memory. Emebedded low cost IoT devices may not have the proper security modules that is able to encrypt the flash memory, which may leave sensitive information explosed. There may be possible for an adversary to
+
+In this blog post, we will explore the latter security concern by attempting to dump the flash memory of the smart bulb and see if we can retreive the password for the home WiFi. This will require physical access to the device, but if we consider the smart bulb's life cycle we can easily imagine that one throws away a defect bulb for replacement which could end up in the hands of an adversary. Access to your home Wifi could be the foothold that an adversary needs to launch further attacks that may lead to important assets being compromised.
+
+### Attack Plan
+1. Open up the device
+2. Locate the flash memory
+3. Perform OSINT to identify what type of hardware I am dealing with
+4. Identify what type of serial interface that is used to interact with the flash 
+
