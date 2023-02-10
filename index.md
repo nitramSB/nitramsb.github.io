@@ -26,9 +26,26 @@ Based on the above operation, there are multiple security concerns:
 In this blog post, we will explore the latter security concern by attempting to dump the flash memory of the smart bulb and see if we can retreive the password for the home WiFi. This will require physical access to the device, but if we consider the smart bulb's life cycle we can easily imagine that one throws away a defect bulb for replacement which could end up in the hands of an adversary. Access to your home Wifi could be the foothold that an adversary needs to launch further attacks that may lead to important assets being compromised.
 
 ### Step 1 - Exposing the hardware
+I used a hacksaw to cut my way through the metal casing coated with plastic in a couple of minutes.
+*image of exposed circuit*
 
-*Image here*
+There are two PCBs. One is driving the LED lights and the other contains the power step down circuit, connectivity and logic. The main PCB could easily be separated from the LED PCB as it was only connected through header pins.
+
+*Image of standalone connectivity PCB*
 
 
-### Step 1 - Exposing the hardware
+### Step 2 - Identifying the hardware components
+Since we know that SoC's don't run of 230V directly, we know that the board contains circuitry to step down the voltage to around 2,7V - 6V. The through hole capacitors and transformers are probably releated to this part. Obviously, the large module board draws our attention. After doing some research it turns out that this hardware board is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB. 
+
+*Insert image here*
+
+I then desoldered the module from the PCB because I wanted to be able to read if there was any silkprint on the board. After desoldering it, it turns out that it shows some basic infromation about the pins.
+*Image of backside of module*
+
+### Step 3 - Test Configuration
+In order to verify that the circuit still works after it has been desoldered from the main PCB I hooked it up according to the data sheet and powered it on. It still works! This means that from now on the module is powered from my lab bench power supply.
+
+### Step 4 - Checking serial ports  
+Most embedded devices contains serial interfaces that is used to debug and program the device before it leaves the factory. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. After inspecting both pair's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information
+
 
