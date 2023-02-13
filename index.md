@@ -241,5 +241,8 @@ bk_rst:0 tuya_rst:0[01-01 01:00:11 TUYA Notice][tuya_tls.c:554] ret = 0
 [12-30 14:03:10 TUYA Notice][tuya_tls.c:554] ret = 0
 
 ```
+The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. Upon closer inspection, by tearing back the silver metal cover we observe the BK7231T SoC with some passive components and a oscillator. This physical layout also matches the Tuya product page, so we can be pretty sure we are dealing with a WB3S module. 
+
+![image](https://user-images.githubusercontent.com/13424965/218554533-4a145527-0ca9-4996-9829-c4096a957495.png)
 
 
