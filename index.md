@@ -43,7 +43,11 @@ After doing some OSINT I suspected that this hardware module is probably the WB3
 
 ![image](https://user-images.githubusercontent.com/13424965/218527002-c550c8f8-f4bd-4247-bacf-087ee8f981c2.png)
 
-In order to verify that the circuit still works after it has been desoldered from the main PCB I and powered it on. It still shows up in the app, which is a great relief.
+In order to verify that the circuit still works after it has been desoldered from the main PCB I and powered it on. It still shows up in the app, which is a great relief. Upon closer inspection, by tearing back the silver metal cover we observe the BK7231T SoC with some passive components and a oscillator. This physical layout also matches the Tuya product page, so we can be pretty sure we are dealing with a WB3S module. 
+
+![image](https://user-images.githubusercontent.com/13424965/218554533-4a145527-0ca9-4996-9829-c4096a957495.png)
+
+Now we got direct access to the pins of the BK7231T, so even if the manufacturer tried to follow Tuya's advice of "Test pins are not recommended." we can still access what we want. 
 
 ### Step 3 - Probing the serial ports 
 Most embedded devices, if not all, contains serial interfaces that is used to debug and program the device before it leaves the factory. Sometimes debug functionality is locked down before the device leaves the factory to reduce the attack surface i.e. increase the security. However, this is not always the case so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. Tuya' owns product page states that there are indeed two UART ports. After inspecting both UART's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information dump:
@@ -241,8 +245,8 @@ bk_rst:0 tuya_rst:0[01-01 01:00:11 TUYA Notice][tuya_tls.c:554] ret = 0
 [12-30 14:03:10 TUYA Notice][tuya_tls.c:554] ret = 0
 
 ```
-The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. Upon closer inspection, by tearing back the silver metal cover we observe the BK7231T SoC with some passive components and a oscillator. This physical layout also matches the Tuya product page, so we can be pretty sure we are dealing with a WB3S module. 
+The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. 
 
-![image](https://user-images.githubusercontent.com/13424965/218554533-4a145527-0ca9-4996-9829-c4096a957495.png)
+### Step 4 - Identifying flash memory operations
 
 
