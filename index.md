@@ -1,15 +1,16 @@
 ## Extracting WiFi credentials from a Tuya smart bulb
 
+### Introduction
 About a year ago I purchased 10 LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home applications, but I was not interesting in paying almost 4 times the amount for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they worked, but they did not provide a high quality feel in terms of app responsiveneness. Two of the bulbs also stopped working way before the claimed 30 000 hours life time, which gave some hope of finding low hanging security fruites.  
 
 
-### Installation process
+### User Installation Process
 From a user perspective, you set up the smart bulbs following these steps:
 1. Plug in the bulb into a 230V socket and turn it on
 2. Install Smart Home App (In my case for IOS)
 3. Follow the pairing wizard
 
-### How does the bulb work?
+### Technical Installation Process
 
 1. The first time the pairing process is launched the the bulb boots and creates it's own wifi network
 2. The mobile phone running Smart Home connects to the bulb's network
@@ -38,17 +39,14 @@ The electrical system comprises two PCBs. One is driving the LED lights and the 
 
 Since we know that SoC's don't run of 230V directly, the board must contain circuitry to step down the voltage to the usual range of 2,7V - 6V. The through-hole components and transformers are related to this functionality. Obviously, the silver module board draws our attention and is the prime suspect of containing the flash memory that we are after. To be able to identify the module I desoldered it from the PCB. When inspecting the backside of the module it showed the silkprint there was any silkprint on the board. After desoldering it, it turns out that it shows some basic infromation about the pins.
 
-After doing some research I suspect that this hardware board is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB. 
-
-
+After doing some OSINT I suspected that this hardware module is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB upon inspection.
 
 ![image](https://user-images.githubusercontent.com/13424965/218527002-c550c8f8-f4bd-4247-bacf-087ee8f981c2.png)
 
-### Step 3 - Test Configuration
-In order to verify that the circuit still works after it has been desoldered from the main PCB I hooked it up according to the data sheet and powered it on. It still works! This means that from now on the module is powered from my lab bench power supply.
+In order to verify that the circuit still works after it has been desoldered from the main PCB I and powered it on. It still shows up in the app, which is a great relief.
 
-### Step 4 - Checking serial ports  
-Most embedded devices contains serial interfaces that is used to debug and program the device before it leaves the factory. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. After inspecting both pair's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information
+### Step 3 - Probing the serial ports 
+Most embedded devices, if not all, contains serial interfaces that is used to debug and program the device before it leaves the factory. Sometimes debug functionality is locked down before the device leaves the factory to reduce the attack surface i.e. increase the security. However, this is not always the case so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. Tuya' owns product page states that there are indeed two UART ports. After inspecting both UART's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information dump:
 
 > V:BK7231S_1.0.5
 
