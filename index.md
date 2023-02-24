@@ -1,53 +1,54 @@
-## Extracting WiFi credentials from a Tuya smart bulb
+## Extracting the WiFi password from a Tuya smart bulb
 
 ### Introduction
-About a year ago I purchased 10 LED smart bulbs that were a generically branded for 10$ a piece. I wanted to check out the hype revolving smart home applications, but I was not interesting in paying almost 4 times the amount for the popular Phillips Hue bulbs. However, me being a security enthusiast knew that a high focus on price and schedue tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they worked, but they did not provide a high quality feel in terms of app responsiveneness. Two of the bulbs also stopped working way before the claimed 30 000 hours life time, which gave some hope of finding low hanging security fruites.  
+About a year ago I purchased 10 LED smart bulbs that were generically branded for 10$ a piece. I wanted to check out the hype revolving smart home applications, but I was not interested in paying almost 4 times the amount for the popular Phillips Hue bulbs. However, I being a security enthusiast, I knew that a high focus on price and schedule tends to impact the quality attributes of the system, including security. I tried out the bulbs for several months and my impression was that they worked, but they did not provide a high quality feel in terms of app responsiveness. Two of the bulbs also stopped working way before the claimed 30 000 hours lifetime, which gave some hope of finding low hanging security fruits.  
 
 
 ### User Installation Process
+
 From a user perspective, you set up the smart bulbs following these steps:
-1. Plug in the bulb into a 230V socket and turn it on
-2. Install Smart Home App (In my case for IOS)
+1. Plug the bulb into a 230V E27 socket and turn on the power
+2. Install the Smart Home App (In my case for IOS)
 3. Follow the pairing wizard
 
-### Technical Installation Process
+### Technical View of Installation Process
 
-1. The first time the pairing process is launched the the bulb boots and creates it's own wifi network
+1. The first time the pairing process is launched, the bulb boots and creates its own wifi network
 2. The mobile phone running Smart Home connects to the bulb's network
-3. The user inputs the home WiFi credentials and they are sent to the bulb
-4. The next time the bulb boots it will join the home network using the saved credentials
-5. From now on the bulb is connected to Tuya servers that it receives commands from
-6. The Smart Home app communicates with the Tuya servers on the internet, requesting it to send commands to the device
+3. The user inputs the home WiFi credentials and they are sent to the bulb for storage
+4. The next time the bulb boots, it will join the home network using the saved credentials
+5. From now on, the bulb is connected to the home Wi-Fi network
+6. The Smart Home app communicates with the Tuya servers, which act as a transceiver between the smart bulb and the app.
 
 
 ### Security Concerns
 Based on the above operation, there are multiple security concerns:
-1. The fact that system architecture requires internet access in itself an security concern. When adding the bulb to your home network you are essentially increasing the attack surface. You expose the device to any threat actor on the internet, which are a lot. There will be a very high likelyhood that the bulb contains vulnerabilitites waiting to be exploted by adversaries. In short, system development often results in undesired emerging behavior, due the interactions of system components, that the developers did not anticipate.
-2.  Since the bulb know how to connect to the home Wifi it must have stored the SSID and password inside the device. For embedded devices it is common to store such information in flash memory, either inside a SoC or in external flash memory. Emebedded low cost IoT devices may not have the proper security modules that is able to encrypt the flash memory, which may leave sensitive information exposed.  
+1. Since the system architecture requires internet access, you are essentially increasing the attack surface by exposing the device to the internet. There is a very high likelihood that the bulb contains vulnerabilities waiting to be exploited by adversaries. In short, system development often results in undesired emerging behavior, due to the interactions between system components that the developers did not anticipate.
+2.  Since the bulb knows how to connect to the home Wi-fi it must have stored the SSID and password inside the device. For embedded devices, it is common to store such information in flash memory, either inside a SoC or in external flash memory. Embedded low-cost IoT devices may not have the proper security controls, such as the ability to encrypt the flash memory, which may leave sensitive information exposed to adversaries. 
 
-In this blog post, we will explore the latter security concern by attempting to dump the flash memory of the smart bulb and see if we can retreive the password for the home WiFi. This will require physical access to the device, however, if we consider the smart bulb's life cycle we can easily imagine that one throws away a defect bulb in the trash which could end up in the hands of an adversary. Access to your home Wifi could be the foothold that an adversary needs to launch further attacks that may lead to important assets being compromised.
+In this blog post, we will explore the latter security concern by attempting to access the flash memory of the smart bulb and see if we can retrieve the password for the home Wi-Fi. This will require physical access to the device. However, if we consider the smart bulb's life cycle, we can easily imagine that one throws away a defective bulb in the trash which could end up in the hands of an adversary. Access to your home Wi-fi could be the foothold that an adversary needs to perform other attacks that may lead to important assets' confidentiality, integrity and availability being violated. 
 
 ### Step 1 - Exposing the hardware
-I used a hacksaw to cut my way through the metal casing coated with plastic in a couple of minutes.
+I used a hacksaw to cut my way through the metal casing in a couple of minutes.
 ![image](https://user-images.githubusercontent.com/13424965/218526753-da06b0b5-29b0-4a52-b44c-d5326e2e7737.png)
 
-The electrical system comprises two PCBs. One is driving the LED lights and the other contains the power step down circuit, connectivity and logic. The main PCB was easily be separated from the LED PCB as it was only connected through header pins. I wanted to check if I was still able to see the device in the app to check if it was still functioning, so I attached 3.3V the the input pins, and confirmed that it still worked. 
+The electrical system comprises two PCBs. One is driving the LED lights and the other contains the power step down circuit, connectivity and logic. The main PCB was easily separated from the LED PCB as it was only connected through header pins. I wanted to check if I was still able to see the device in the app to check if it was still functioning, so I attached 3.3V to the input pins, and confirmed that it still worked. 
 
 ![image](https://user-images.githubusercontent.com/13424965/218526914-ec42fa0b-c13f-4db2-85e9-b50885b6b8cc.png)
 
 ### Step 2 - Identifying the hardware components
 
-Since we know that SoC's don't run of 230V directly, the board must contain circuitry to step down the voltage to the usual range of 2,7V - 6V. The through-hole components and transformers are related to this functionality. Obviously, the silver module board draws our attention and is the prime suspect of containing the flash memory that we are after. To be able to identify the module I desoldered it from the PCB. When inspecting the backside of the module it showed the silkprint there was any silkprint on the board. After desoldering it, it turns out that it shows some basic infromation about the pins.
+Since we know that SoC's don't run at 230V directly, the board must contain circuitry to step down the voltage to the usual range of 2,7V - 6V. The through-hole components and transformers are related to this functionality. Obviously, the silver module board draws our attention and is the prime suspect of containing the flash memory that we are after. To be able to identify the module, I desoldered it from the PCB. When inspecting the backside of the module, it showed the silkprint.
 
-After doing some OSINT I suspected that this hardware module is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB upon inspection.
+After doing some OSINT, I suspected that this hardware module is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB upon inspection.
 
 ![image](https://user-images.githubusercontent.com/13424965/218527002-c550c8f8-f4bd-4247-bacf-087ee8f981c2.png)
 
-In order to verify that the circuit still works after it has been desoldered from the main PCB I and powered it on. It still shows up in the app, which is a great relief. Upon closer inspection, by tearing back the silver metal cover we observe the BK7231T SoC with some passive components and a oscillator. This physical layout also matches the Tuya product page, so we can be pretty sure we are dealing with a WB3S module. 
+In order to verify that the circuit still worked, I powered it on. It still shows up in the app, which is a great relief. Upon closer inspection, by tearing back the silver metal cover, I observed the BK7231T SoC with some passive components and an oscillator. This physical layout also matches the Tuya product page, so we can be pretty sure we are dealing with a WB3S module. 
 
 ![image](https://user-images.githubusercontent.com/13424965/218554533-4a145527-0ca9-4996-9829-c4096a957495.png)
 
-Now we got direct access to the pins of the BK7231T, so even if the manufacturer tried to follow Tuya's advice of "Test pins are not recommended." we can still access what we want. 
+Now we have got direct access to the pins of the BK7231T, so even if the manufacturer tried to follow Tuya's advice of "Test pins are not recommended." we can still access what we want. 
 
 ### Step 3 - Probing the serial ports 
 
@@ -55,7 +56,7 @@ Now we got direct access to the pins of the BK7231T, so even if the manufacturer
 ![image](https://user-images.githubusercontent.com/13424965/221281801-594f4a45-1ff1-491e-8ebe-1e9beed0a800.png)
 
 
-Most embedded devices, if not all, contains serial interfaces that is used to debug and program the device before it leaves the factory. Sometimes debug functionality is locked down before the device leaves the factory to reduce the attack surface i.e. increase the security. However, this is not always the case so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. Tuya' owns product page states that there are indeed two UART ports. After inspecting both UART's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information dump:
+Most embedded devices, if not all, contain serial interfaces that are used to debug and program the device before it leaves the factory. Sometimes, debug functionality is locked down before the device leaves the factory to reduce the attack surface, i.e. and increase security. However, this is not always the case, so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected were UART ports. Tuya's own product page states that there are indeed two UART ports. After inspecting both UART's TX ports on an oscilloscope, I observed that one of the ports contains data when the device boots. By looking at the highest frequency part of the signal, it showed a baudrate of 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz, I obtained the following information dump:
 
 
 
