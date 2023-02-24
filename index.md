@@ -55,7 +55,7 @@ Now we have got direct access to the pins of the BK7231T, so even if the manufac
 ![image](https://user-images.githubusercontent.com/13424965/221281217-c9593ff6-a3f1-42aa-984f-e9f8d782c990.png)
 
 
-Most embedded devices, if not all, contain serial interfaces that are used to debug and program the device before it leaves the factory. Sometimes, debug functionality is locked down before the device leaves the factory to reduce the attack surface, i.e. and increase security. However, this is not always the case, so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected were UART ports. Tuya's own product page states that there are indeed two UART ports. After inspecting both UART's TX ports on an oscilloscope, I observed that 2TX contains data when the device boots. By looking at the highest frequency part of the signal, it showed a baudrate of 115 200 Hz. After rebooting the device and connecting the TX port to a logic analyzer at 15200 Hz, I obtained the following information dump:
+Most embedded devices, if not all, contain serial interfaces that are used to debug and program the device before it leaves the factory. Sometimes, debug functionality is locked down before the device leaves the factory to reduce the attack surface, i.e. and increase security. However, this is not always the case, so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected were UART ports. Tuya's own product page states that there are indeed two UART ports. After inspecting both UART's TX ports on an oscilloscope, I observed that 2TX sends data when the device boots. By looking at the highest frequency part of the signal, it showed a baudrate of 115 200 Hz. After rebooting the device and connecting the TX port to a logic analyzer at 15200 Hz, I obtained the following information dump:
 
 ```
 
@@ -250,11 +250,15 @@ bk_rst:0 tuya_rst:0[01-01 01:00:11 TUYA Notice][tuya_tls.c:554] ret = 0
 ```
 The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. 
 
-### Step 4 - Dumping the memory
-When researching how to read the memory of the BK7231T I found a open-source firmware flashing tool called OpenBeken (https://github.com/openshwprojects/OpenBK7231T_App). OpenBeken handles the interfacing towards the device and only a USB UART bridge (I used Bus Pirate 3.6) is needed. The memory is read of the WB3S 1TX and 1RX pins. 
+When I researched how to read the memory of the BK7231T I found an open-source firmware flashing tool called OpenBeken (https://github.com/openshwprojects/OpenBK7231T_App). OpenBeken handles the interfacing for the device and only a USB UART bridge (I used Bus Pirate 3.6) is needed. The memory is read of the WB3S 1TX and 1RX pins. 
+
 ![image](https://user-images.githubusercontent.com/13424965/221281801-594f4a45-1ff1-491e-8ebe-1e9beed0a800.png)
 
-The memory dump results in a text file. By searching for the SSID in a simple text editor, the result yields the SSDD and the password. See image below in red!
+The memory dump results in a text file. By searching for SSID in a simple text editor, the search-result yields the SSDD and the password! See image below.
 
 ![image](https://user-images.githubusercontent.com/13424965/221283892-9a4be4ea-eb7e-4173-8c8e-10ad726d65da.png)
+
+## Conclusion
+
+Tuya smart bulbs are IoT devices that are functionally decent and cheap. However, like many IoT devices, security is not always a sufficient priority to mitigate all types of attacks (such as physical access attacks). The blog post looks into a physical access attack where the Wi-Fi password of the associated network is exposed due to being stored unencrypted in the flash memory. Adversaries may use this attack to gain a foothold in the target's Wi-Fi network that can be used for other attacks.
 
