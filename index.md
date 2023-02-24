@@ -252,6 +252,6 @@ bk_rst:0 tuya_rst:0[01-01 01:00:11 TUYA Notice][tuya_tls.c:554] ret = 0
 ```
 The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. 
 
-### Step 4 - Identifying flash memory operations
-
+### Step 4 - Dumping the memory
+![image](https://user-images.githubusercontent.com/13424965/221283892-9a4be4ea-eb7e-4173-8c8e-10ad726d65da.png)
 
