@@ -50,6 +50,11 @@ In order to verify that the circuit still works after it has been desoldered fro
 Now we got direct access to the pins of the BK7231T, so even if the manufacturer tried to follow Tuya's advice of "Test pins are not recommended." we can still access what we want. 
 
 ### Step 3 - Probing the serial ports 
+
+![image](https://user-images.githubusercontent.com/13424965/221281217-c9593ff6-a3f1-42aa-984f-e9f8d782c990.png)
+![image](https://user-images.githubusercontent.com/13424965/221281801-594f4a45-1ff1-491e-8ebe-1e9beed0a800.png)
+
+
 Most embedded devices, if not all, contains serial interfaces that is used to debug and program the device before it leaves the factory. Sometimes debug functionality is locked down before the device leaves the factory to reduce the attack surface i.e. increase the security. However, this is not always the case so it is good practice to check if the serial ports give away any information that you can use to identify the device or further attacks. I observed 2 pairs of "TX/RX" pins which I suspected was UART ports. Tuya' owns product page states that there are indeed two UART ports. After inspecting both UART's TX port on an oscilloscope we observe that one of the ports contains data when the device boots. By looking at the signal we can determine the baudrate which seems to be 115 200 Hz. After rebooting the device and connecting the TX port to my logic analyzer at 15200 Hz we obtain the following information dump:
 
 
