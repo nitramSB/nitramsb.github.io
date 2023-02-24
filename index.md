@@ -251,9 +251,10 @@ bk_rst:0 tuya_rst:0[01-01 01:00:11 TUYA Notice][tuya_tls.c:554] ret = 0
 The log shows the SDK version to be BK7231S_1.0.5 and it shows the SSID of the home network. There is also meta data about how way it works such as messaging protocols, boot order, and configuration info. 
 
 ### Step 4 - Dumping the memory
+When researching how to read the memory of the BK7231T I found a open-source firmware flashing tool called OpenBeken (https://github.com/openshwprojects/OpenBK7231T_App). OpenBeken handles the interfacing towards the device and only a USB UART bridge (I used Bus Pirate 3.6) is needed. The memory is read of the WB3S 1TX and 1RX pins. 
 ![image](https://user-images.githubusercontent.com/13424965/221281801-594f4a45-1ff1-491e-8ebe-1e9beed0a800.png)
 
-
+The memory dump results in a text file. By searching for the SSID in a simple text editor, the result yields the SSDD and the password. See image below in red!
 
 ![image](https://user-images.githubusercontent.com/13424965/221283892-9a4be4ea-eb7e-4173-8c8e-10ad726d65da.png)
 
