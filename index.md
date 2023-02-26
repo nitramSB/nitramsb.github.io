@@ -32,13 +32,13 @@ In this blog post, we will explore the latter security concern by attempting to 
 I used a hacksaw to cut my way through the metal casing in a couple of minutes.
 ![image](https://user-images.githubusercontent.com/13424965/218526753-da06b0b5-29b0-4a52-b44c-d5326e2e7737.png)
 
-The electrical system comprises two PCBs. One is driving the LED lights and the other contains the power step down circuit, connectivity and logic. The main PCB was easily separated from the LED PCB as it was only connected through header pins. I wanted to check if I was still able to see the device in the app to check if it was still functioning, so I attached 3.3V to the input pins, and confirmed that it still worked. 
+The electrical system comprises two PCBs. One is driving the LED lights and the other contains the power step down circuit, connectivity and logic. The main PCB was easily separated from the LED PCB as it was only connected through header pins. 
 
 ![image](https://user-images.githubusercontent.com/13424965/218526914-ec42fa0b-c13f-4db2-85e9-b50885b6b8cc.png)
 
 ### Step 2 - Identifying the hardware components
 
-Since we know that SoC's don't run at 230V directly, the board must contain circuitry to step down the voltage to the usual range of 2,7V - 6V. The through-hole components and transformers are related to this functionality. Obviously, the silver module board draws our attention and is the prime suspect of containing the flash memory that we are after. To be able to identify the module, I desoldered it from the PCB. When inspecting the backside of the module, it showed the silkprint.
+Since we know that SoC's don't run at 230V directly, the board must contain circuitry to step down the voltage to the usual range of 2,7V - 6V. The through-hole components and transformers are related to this functionality. Obviously, the silver module board draws our attention and is the prime suspect of containing the flash memory that we are after. I wanted to check if I was still able to see the device in the app to check if it was still functioning, so I attached 3.3V to the input pins, and confirmed that it still worked. To be able to identify the module, I desoldered it from the PCB. When inspecting the backside of the module, it showed the silkprint.
 
 After doing some OSINT, I suspected that this hardware module is probably the WB3S module developed by Tuya based on the formfactor and pinout. Ref:(https://developer.tuya.com/en/docs/iot/wb3s-module-datasheet?id=K9dx20n6hz5n4). The datasheet of the WB3S reads that it contains a 2MB flash onboard, and I did not find any other flash ICs on the PCB upon inspection.
 
